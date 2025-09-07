@@ -1,0 +1,9 @@
+{
+  "musicDir": "./music",
+  "serverPort": 5050,
+  "allowedExtensions": [".mp3", ".wav", ".flac"],
+  "defaultVolume": 70,
+  "theme": "dark",
+  "language": "tr",
+  "logLevel": "info"
+}

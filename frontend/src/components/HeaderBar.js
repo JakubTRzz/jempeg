@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FaHome, FaWifi, FaBluetooth } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Bar = styled.div`
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
+  z-index: 1000;
   width: 100%;
   min-height: 48px;
   max-height: 64px;
   background: ${(props) => props.theme.colors.primary};
   color: white;
   display: grid;
-  grid-template-columns: 1fr auto 1fr; /* sol - orta - sağ */
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 0 1rem;
   box-sizing: border-box;
@@ -70,6 +70,10 @@ function HeaderBar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 🔹 State ekledik
+  const [wifiConnected, setWifiConnected] = useState(true);
+  const [btConnected, setBtConnected] = useState(false);
+
   const isHome = location.pathname === "/";
 
   const now = new Date();
@@ -84,7 +88,7 @@ function HeaderBar() {
   });
 
   return (
-    <Bar>
+    <Bar id="header-bar">
       <Left>
         {!isHome && (
           <HomeButton onClick={() => navigate("/")}>
@@ -99,8 +103,8 @@ function HeaderBar() {
       </Center>
 
       <Right>
-        <FaWifi />
-        <FaBluetooth />
+        <FaWifi color={wifiConnected ? "white" : "gray"} />
+        <FaBluetooth color={btConnected ? "white" : "gray"} />
       </Right>
     </Bar>
   );

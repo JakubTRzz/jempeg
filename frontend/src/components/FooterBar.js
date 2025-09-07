@@ -15,6 +15,14 @@ const Bar = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+  box-sizing: border-box; /* scrollbar padding fix */
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
 `;
 
 const Thumbnail = styled.img`
@@ -22,14 +30,24 @@ const Thumbnail = styled.img`
   height: 40px;
   border-radius: 6px;
   object-fit: cover;
+
+  @media (max-width: 600px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const Info = styled.div`
-  flex: 1;
+  flex: 1; /* Esnek alan */
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
   overflow: hidden;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+    align-items: center;
+  }
 `;
 
 const Song = styled.span`
@@ -48,11 +66,19 @@ const ProgressWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 const Time = styled.span`
   font-size: 0.7rem;
   opacity: 0.8;
+
+  @media (max-width: 600px) {
+    font-size: 0.65rem;
+  }
 `;
 
 const ProgressContainer = styled.div`
@@ -74,13 +100,26 @@ const ProgressDot = styled.div`
   left: ${(props) => props.progress}%;
   transform: translateX(-50%);
   transition: left 0.1s linear;
+
+  @media (max-width: 600px) {
+    width: 8px;
+    height: 8px;
+    top: -2px;
+  }
 `;
 
 const Controls = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 1.3rem;
+  justify-content: center; /* Ortada */
+  gap: 1.5rem;
+  font-size: 1.8rem;
+  flex-shrink: 0; /* Daralmayı engelle */
+
+  @media (max-width: 600px) {
+    gap: 1rem;
+    font-size: 1.5rem;
+  }
 `;
 
 function FooterBar() {
@@ -94,26 +133,23 @@ function FooterBar() {
     setIsPlaying,
   } = usePlayer();
 
-  const totalDuration = 200; // örnek: 200 saniye = 3:20
+  const totalDuration = 200; // örnek: 200 saniye
   const currentTime = Math.round((progress / 100) * totalDuration);
 
-  // süreyi mm:ss formatına çevir
   const formatTime = (sec) => {
     const m = Math.floor(sec / 60);
     const s = sec % 60;
     return `${m}:${s < 10 ? "0" + s : s}`;
   };
 
-  // ilerleme barını oynatma ile güncelle
   useEffect(() => {
     if (!isPlaying) return;
     const interval = setInterval(() => {
-      setProgress((prev) => (prev < 100 ? prev + 0.5 : 0)); // %0.5 artış
+      setProgress((prev) => (prev < 100 ? prev + 0.5 : 0));
     }, 1000);
     return () => clearInterval(interval);
   }, [isPlaying, setProgress]);
 
-  // footer gizleme koşulları
   if (
     (source === "local" && location.pathname === "/music") ||
     (source === "radio" && location.pathname === "/radio") ||

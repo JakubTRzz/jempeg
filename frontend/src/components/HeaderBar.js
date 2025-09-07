@@ -1,70 +1,87 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { FaWifi, FaBluetooth, FaHome } from "react-icons/fa";
+import { FaHome, FaWifi, FaBluetooth } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Bar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 48px;
+  max-height: 64px;
   background: ${(props) => props.theme.colors.primary};
   color: white;
-  padding: 0.6rem 1rem;
-  font-size: ${(props) => `calc(1.1rem * ${props.theme.fontScale})`};
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* sol - orta - sağ */
+  align-items: center;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  font-weight: bold;
+
+  @media (max-width: 600px) {
+    min-height: 44px;
+    max-height: 54px;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 1200px) {
+    min-height: 56px;
+    max-height: 72px;
+    font-size: 1.2rem;
+  }
 `;
 
 const Left = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.8rem; /* ikon ile sıcaklık arasında boşluk */
+  gap: 0.6rem;
+  justify-content: flex-start;
 `;
-
-const HomeButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 8px;
-  padding: 6px 8px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  /* kalıcı gölge */
-`;
-
 
 const Center = styled.div`
-  flex: 1;
   text-align: center;
-  font-weight: 600;
 `;
 
 const Right = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.6rem;
+  justify-content: flex-end;
+`;
+
+const HomeButton = styled.div`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:active {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(0.95);
+  }
 `;
 
 function HeaderBar() {
-  const [dateTime, setDateTime] = useState(new Date());
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const interval = setInterval(() => setDateTime(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const isHome = location.pathname === "/";
 
-  const time = dateTime.toLocaleTimeString("tr-TR", {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("tr-TR", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+  });
+  const timeStr = now.toLocaleTimeString("tr-TR", {
     hour: "2-digit",
     minute: "2-digit",
   });
-
-  const date = dateTime.toLocaleDateString("tr-TR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-  });
-
-  const isHome = location.pathname === "/";
 
   return (
     <Bar>
@@ -76,9 +93,11 @@ function HeaderBar() {
         )}
         <span>24°C</span>
       </Left>
+
       <Center>
-        {date} | {time}
+        {dateStr} | {timeStr}
       </Center>
+
       <Right>
         <FaWifi />
         <FaBluetooth />

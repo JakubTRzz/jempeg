@@ -11,7 +11,7 @@ const Btn = styled.button`
   border-radius: 16px;
   padding: 2rem;
   color: white;
-  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  font-size: ${(props) => `calc(1rem * ${props.theme.fontScale})`};
   cursor: pointer;
   transition: 0.3s;
 
@@ -21,7 +21,7 @@ const Btn = styled.button`
   }
 
   svg {
-    font-size: clamp(1.5rem, 5vw, 3rem);
+    font-size: ${(props) => `calc(2rem * ${props.theme.fontScale})`};
     margin-bottom: 0.5rem;
   }
 

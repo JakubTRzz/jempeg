@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import HeaderBar from "../components/HeaderBar";
-import FooterBar from "../components/FooterBar";
 import IconButton from "../components/IconButton";
 import { FaMusic, FaBroadcastTower, FaBluetooth, FaCog, FaFolder } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Grid = styled.div`
   display: grid;
@@ -18,18 +17,16 @@ const Grid = styled.div`
 `;
 
 function HomePage() {
+  const navigate = useNavigate();
+
   return (
-    <>
-      <HeaderBar />
-      <Grid>
-        <IconButton icon={<FaMusic />} label="Müzik" onClick={() => {}} />
-        <IconButton icon={<FaBluetooth />} label="Bluetooth" onClick={() => {}} />
-        <IconButton icon={<FaCog />} label="Ayarlar" onClick={() => {}} />
-        <IconButton icon={<FaFolder />} label="Dosyalar" onClick={() => {}} />
-        <IconButton icon={<FaBroadcastTower />} label="Radyo" onClick={() => {}} />
-      </Grid>
-      <FooterBar />
-    </>
+    <Grid>
+      <IconButton icon={<FaMusic />} label="Müzik" onClick={() => navigate("/music")} />
+      <IconButton icon={<FaBluetooth />} label="Bluetooth" onClick={() => navigate("/bluetooth")} />
+      <IconButton icon={<FaCog />} label="Ayarlar" onClick={() => navigate("/settings")} />
+      <IconButton icon={<FaFolder />} label="Dosyalar" onClick={() => navigate("/files")} />
+      <IconButton icon={<FaBroadcastTower />} label="Radyo" onClick={() => navigate("/radio")} />
+    </Grid>
   );
 }
 

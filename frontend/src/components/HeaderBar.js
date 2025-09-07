@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaWifi, FaBluetooth } from "react-icons/fa";
+import { FaWifi, FaBluetooth, FaHome } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Bar = styled.div`
   display: flex;
@@ -9,12 +10,26 @@ const Bar = styled.div`
   background: ${(props) => props.theme.colors.primary};
   color: white;
   padding: 0.6rem 1rem;
-  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-size: ${(props) => `calc(1.1rem * ${props.theme.fontScale})`};
 `;
 
 const Left = styled.div`
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem; /* ikon ile sıcaklık arasında boşluk */
 `;
+
+const HomeButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);  /* kalıcı gölge */
+`;
+
 
 const Center = styled.div`
   flex: 1;
@@ -30,6 +45,8 @@ const Right = styled.div`
 
 function HeaderBar() {
   const [dateTime, setDateTime] = useState(new Date());
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const interval = setInterval(() => setDateTime(new Date()), 1000);
@@ -42,15 +59,26 @@ function HeaderBar() {
   });
 
   const date = dateTime.toLocaleDateString("tr-TR", {
-    weekday: "long", // artık TAM gün adı (örn. Pazar)
+    weekday: "long",
     day: "2-digit",
-    month: "long",   // tam ay adı (örn. Eylül)
+    month: "long",
   });
+
+  const isHome = location.pathname === "/";
 
   return (
     <Bar>
-      <Left>24°C</Left>
-      <Center>{date} | {time}</Center>
+      <Left>
+        {!isHome && (
+          <HomeButton onClick={() => navigate("/")}>
+            <FaHome />
+          </HomeButton>
+        )}
+        <span>24°C</span>
+      </Left>
+      <Center>
+        {date} | {time}
+      </Center>
       <Right>
         <FaWifi />
         <FaBluetooth />
